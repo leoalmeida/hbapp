@@ -1,0 +1,8 @@
+{
+  "name": "heartbeat",
+  "integrations": {
+    "cordova": {}
+  },
+  "type": "angular",
+  "pro_id": "7b38ad26"
+}
