@@ -1,8 +1,7 @@
 {
-  "name": "heartbeat",
+  "name": "webapp",
   "integrations": {
     "cordova": {}
   },
-  "type": "angular",
-  "pro_id": "7b38ad26"
+  "type": "angular"
 }
