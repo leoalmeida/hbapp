@@ -1,0 +1,23 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Heartbeat</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+	<canvas #heartbeatcanvas></canvas>
+	<div>
+		<div>
+			<h1>Messages:</h1>
+			<p *ngFor="let message of messages">
+				{{message | json}}
+			</p>
+		</div>
+		<div>
+			<h1>Status info:</h1>
+			<p *ngFor="let statusMessage of status">
+				{{statusMessage}}
+			</p>
+		</div>
+	</div>
+</ion-content>
