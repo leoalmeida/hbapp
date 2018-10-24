@@ -64,7 +64,8 @@ export class HeartbeatPage implements  AfterViewInit, OnDestroy  {
 
 					this.messages.push(msg);
 					//this.points.push({y:Number(msg.notification.data),x:10});
-					this.points[0] = {y:Number(msg.notification.data),x:10};
+					let raw = this.rangePercentage(Number(msg.notification.data), 0, 1024)-50;
+					this.points[0] = {y:raw,x:10};
 
 				}
 			},
@@ -198,6 +199,19 @@ export class HeartbeatPage implements  AfterViewInit, OnDestroy  {
 			dx: dx,
 			dy: dy
 		};
+	}
+
+	rangePercentage (input, range_min, range_max){
+
+	    var percentage = ((input - range_min) * 100) / (range_max - range_min);
+
+	    if (percentage > 100) {
+	            percentage = 100;
+	    } else if (percentage < 0){
+	        percentage = 0;
+	    }
+
+	    return percentage;
 	}
 
 }
