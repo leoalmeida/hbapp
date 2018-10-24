@@ -32,7 +32,8 @@ export class HeartbeatPage implements  AfterViewInit, OnDestroy  {
 	messages: Array<MqttMessage> = [];
 
 	status: Array<string> = [];
-
+	BPM: number = 0;
+	IBI: number = 0;
 	ball: any = {};
 	point: any = {};
 	current_point: number = 0;
@@ -64,6 +65,33 @@ export class HeartbeatPage implements  AfterViewInit, OnDestroy  {
 					this.messages.push(msg);
 					//this.points.push({y:Number(msg.notification.data),x:10});
 					this.points[0] = {y:Number(msg.notification.data),x:10};
+
+				}
+			},
+			error: (error: Error) => {
+				this.status.push(`Something went wrong: ${error.message}`);
+			}
+		});
+		this._mqttService.subscribeTo<MqttMessage>('esp/000001/BPM')
+		.subscribe({
+			next: (msg: SubscriptionGrant | MqttMessage) => {
+				if (msg instanceof SubscriptionGrant) {
+					this.status.push('Subscribed to esp/000001/BPM topic!');
+				} else {
+					this.BPM = Number(msg.notification.data);
+				}
+			},
+			error: (error: Error) => {
+				this.status.push(`Something went wrong: ${error.message}`);
+			}
+		});
+		this._mqttService.subscribeTo<MqttMessage>('esp/000001/IBI')
+		.subscribe({
+			next: (msg: SubscriptionGrant | MqttMessage) => {
+				if (msg instanceof SubscriptionGrant) {
+					this.status.push('Subscribed to esp/000001/IBI topic!');
+				} else {
+					this.IBI = Number(msg.notification.data);
 				}
 			},
 			error: (error: Error) => {
@@ -110,8 +138,8 @@ export class HeartbeatPage implements  AfterViewInit, OnDestroy  {
 		let canvas = this.myCanvas.nativeElement;
 		this.context = canvas.getContext("2d");
 
-		this.rectW = canvas.width = document.body.offsetWidth;
-		this.rectH = canvas.height = document.body.offsetHeight;
+		this.rectW = canvas.width = document.body.clientWidth;
+		this.rectH = canvas.height = document.body.clientHeight;
 
 		this.ball = {
 			x: 0,
