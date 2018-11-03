@@ -6,13 +6,8 @@ import {IClientOptions, MqttClient} from 'mqtt';
 
 export interface MqttMessage {
 	from: string;
-	notification: MessageBody;
-}
-
-export interface MessageBody {
-	title: string;
-	//type: string;
 	data: string;
+	type?: string;
 }
 
 @Component({
@@ -24,14 +19,18 @@ export class HeartbeatPage implements  AfterViewInit, OnDestroy  {
 	@ViewChild("heartbeatcanvas") myCanvas;
 	rectW:number = 50;
 	rectH:number =  50;
+	screenSized: number = 0;
+	canvasPos: number = 0;
 	rectColor:string = "#FF0000";
 	context:CanvasRenderingContext2D;
 
 	private counter = 0;
 
 	messages: Array<MqttMessage> = [];
+	lastmessage: MqttMessage = {"from": "", "data": "", "type": ""};
 
 	status: Array<string> = [];
+	RAW: number = 0;
 	BPM: number = 0;
 	IBI: number = 0;
 	ball: any = {};
@@ -39,6 +38,8 @@ export class HeartbeatPage implements  AfterViewInit, OnDestroy  {
 	current_point: number = 0;
 
 	points:any = [];
+
+	lastrawmsg: number = 0;
 
 	constructor(private _mqttService: MqttService) {
 		this._mqttService.status().subscribe((s: ConnectionStatus) => {
@@ -61,12 +62,18 @@ export class HeartbeatPage implements  AfterViewInit, OnDestroy  {
 				if (msg instanceof SubscriptionGrant) {
 					this.status.push('Subscribed to esp/000001/RAW topic!');
 				} else {
-
+					msg.type = "Signal";
+					this.lastmessage = msg;
 					this.messages.push(msg);
-					//this.points.push({y:Number(msg.notification.data),x:10});
-					let raw = this.rangePercentage(Number(msg.notification.data), 0, 1024)-50;
-					this.points[0] = {y:raw,x:10};
-
+					//this.points.push({y:Number(msg.data),x:10});
+					let raw: number = Number(msg.data);
+					this.RAW = raw;
+					this.screenSized = this.rangePercentage(raw,0,1024, 0,this.rectH);
+					//this.canvasPos = this.percentage-50;
+					this.points[0] = {y:this.screenSized-(this.rectH/2),x:10};
+					//if (this.percentage > 50) this.points[0] = {y:this.canvasPos,x:10};
+					//else this.points[0] = {y:this.canvasPos,x:10};
+					this.lastrawmsg = Date.now();
 				}
 			},
 			error: (error: Error) => {
@@ -79,7 +86,8 @@ export class HeartbeatPage implements  AfterViewInit, OnDestroy  {
 				if (msg instanceof SubscriptionGrant) {
 					this.status.push('Subscribed to esp/000001/BPM topic!');
 				} else {
-					this.BPM = Number(msg.notification.data);
+					msg.type = "BPM";
+					this.BPM = Number(msg.data);
 				}
 			},
 			error: (error: Error) => {
@@ -92,7 +100,8 @@ export class HeartbeatPage implements  AfterViewInit, OnDestroy  {
 				if (msg instanceof SubscriptionGrant) {
 					this.status.push('Subscribed to esp/000001/IBI topic!');
 				} else {
-					this.IBI = Number(msg.notification.data);
+					msg.type = "IBI";
+					this.IBI = Number(msg.data);
 				}
 			},
 			error: (error: Error) => {
@@ -103,7 +112,7 @@ export class HeartbeatPage implements  AfterViewInit, OnDestroy  {
 
 
 	sendMsg(): void {
-		this._mqttService.publishTo<MessageBody>('esp/000001/info', {title: '', data: 'teste'}).subscribe({
+		this._mqttService.publishTo<MqttMessage>('esp/000001/info', {from: '000001', data: 'teste'}).subscribe({
 			next: () => {
 				this.status.push('Message sent to esp/000001/info topic');
 			},
@@ -140,7 +149,7 @@ export class HeartbeatPage implements  AfterViewInit, OnDestroy  {
 		this.context = canvas.getContext("2d");
 
 		this.rectW = canvas.width = document.body.clientWidth;
-		this.rectH = canvas.height = document.body.clientHeight;
+		this.rectH = canvas.height = document.body.clientHeight - 110;
 
 		this.ball = {
 			x: 0,
@@ -157,11 +166,16 @@ export class HeartbeatPage implements  AfterViewInit, OnDestroy  {
 
 	render(){
 		requestAnimationFrame(()=> {
-			this.render()
+			/*let newDate = Date.now();
+			if (newDate > this.lastrawmsg + 10){
+				this.points = [];
+				this.points[0] = {y:0,x:10};
+			};*/
+			this.render();
 		});
 		this.animateTo();
 		var ctx = this.context;
-		ctx.fillStyle = "rgba(0, 0, 0, .01)";
+		ctx.fillStyle = "rgba(255, 255, 255, .01)";
 		ctx.fillRect(0,0,this.rectW,this.rectH);
 		ctx.fillStyle = "rgba(255, 0, 0, 1)";
 		ctx.beginPath();
@@ -186,6 +200,7 @@ export class HeartbeatPage implements  AfterViewInit, OnDestroy  {
 				this.current_point = 0;
 				if( this.ball.x > this.rectW ) {
 					this.point.x = this.ball.x = 0;
+					this.context.clearRect(0, 0, this.rectW,this.rectH);
 				}
 			}
 		}
@@ -201,14 +216,14 @@ export class HeartbeatPage implements  AfterViewInit, OnDestroy  {
 		};
 	}
 
-	rangePercentage (input, range_min, range_max){
+	rangePercentage (input: number, range_min: number, range_max: number, newRange_min: number, newRange_max: number): number{
 
-	    var percentage = ((input - range_min) * 100) / (range_max - range_min);
+	    let percentage: number = ((newRange_max-newRange_min)*(input - range_min)/(range_max - range_min))+newRange_min;
 
-	    if (percentage > 100) {
-	            percentage = 100;
-	    } else if (percentage < 0){
-	        percentage = 0;
+	    if (percentage > newRange_max) {
+	        percentage = newRange_max;
+	    } else if (percentage < newRange_min){
+	        percentage = newRange_min;
 	    }
 
 	    return percentage;

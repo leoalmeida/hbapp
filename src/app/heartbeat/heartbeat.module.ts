@@ -19,15 +19,15 @@ const routes: Routes = [
   }
 ];
 const config = {
-		host: 'm15.cloudmqtt.com',
-		protocol: 'wss',
-		port: 32863,
+		host: '192.168.0.17',
+		protocol: 'ws',
+		port: 3004,
 		path: '',
         keepalive: 5,
 		username: 'xrufgoyx',
 		password: 'oWzHcp2N5M4f'
 	};
-	
+
 @NgModule({
   imports: [
     CommonModule,

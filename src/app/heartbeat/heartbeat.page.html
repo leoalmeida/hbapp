@@ -3,35 +3,60 @@
     <ion-buttons slot="start">
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
-    <ion-title>Heartbeat</ion-title>
+    <ion-title>Height {{rectH}} -- screenSized {{screenSized}}</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <ion-card>
-    <ion-item>
-      <ion-avatar item-start>
-         <img src="assets/images/heart.png"/>
-      </ion-avatar>
-      <h2>{{BPM}}</h2>
-      <p>BPM</p>
-    </ion-item>
-    <ion-card-content>
+  <ion-card class="cards-bg social-cards">
+    <ion-row>
+      <ion-col align-self-center text-center>
+        <span ion-text item-start color="subtle"  icon-start class="item-bold">
+          <ion-icon name="heart"></ion-icon>
+          BPM {{BPM}}
+        </span>
+      </ion-col>
+      <ion-col align-self-center text-center>
+        <span ion-text item-start color="primary"  icon-start class="item-bold">
+          <ion-icon name="analytics"></ion-icon>
+          Signal {{RAW}}
+        </span>
+      </ion-col>
+      <ion-col align-self-center text-center>
+        <span ion-text item-start color="secondary"  icon-start class="item-bold">
+          <ion-icon name="stats"></ion-icon>
+          IBI {{IBI}}
+        </span>
+      </ion-col>
+    </ion-row>
+    <ion-card-content class="heartbeatcard">
       <canvas #heartbeatcanvas></canvas>
     </ion-card-content>
   </ion-card>
-	<div>
-		<div>
-			<h1>Messages:</h1>
-			<p *ngFor="let message of messages">
-				{{message | json}}
-			</p>
-		</div>
-		<div>
-			<h1>Status info:</h1>
-			<p *ngFor="let statusMessage of status">
-				{{statusMessage}}
-			</p>
-		</div>
-	</div>
+  <ion-card>
+  </ion-card>
+  <ion-card class="cards-list-demo">
+    <ion-card-header>
+      Mudança de status
+    </ion-card-header>
+    <ion-list>
+      <ion-item *ngFor="let statusMessage of status">
+        <ion-icon name="wifi" item-start></ion-icon>
+       {{statusMessage}}
+      </ion-item>
+    </ion-list>
+  </ion-card>
+  <ion-card class="cards-list-demo">
+    <ion-card-header>
+      Leituras
+    </ion-card-header>
+    <ion-list>
+      <ion-item>
+        <ion-icon name="mail-unread" item-start small></ion-icon>
+        <h2>{{lastmessage.type | async}}:</h2>
+        {{lastmessage | json | async}}
+      </ion-item>
+    </ion-list>
+  </ion-card>
+
 </ion-content>

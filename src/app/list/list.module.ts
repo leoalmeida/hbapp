@@ -6,6 +6,20 @@ import { RouterModule } from '@angular/router';
 
 import { ListPage } from './list.page';
 
+import { MqttService } from '../services/mqtt.service';
+import {MQTT_CONFIG} from '../tokens/mqtt-config.injection-token';
+
+const config = {
+		host: '192.168.0.17',
+		protocol: 'ws',
+		port: 3004,
+		path: '',
+        keepalive: 5,
+		username: 'xrufgoyx',
+		password: 'oWzHcp2N5M4f'
+	};
+
+
 @NgModule({
   imports: [
     CommonModule,
@@ -18,6 +32,7 @@ import { ListPage } from './list.page';
       }
     ])
   ],
+  providers: [MqttService, {provide: MQTT_CONFIG, useValue: config}],
   declarations: [ListPage]
 })
 export class ListPageModule {}
