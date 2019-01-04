@@ -1,0 +1,44 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title> <ion-icon name="heart"></ion-icon> BPM {{BPM}}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-card class="cards-bg social-cards">
+    <ion-row>
+      <ion-col align-self-center text-center>
+        <span ion-text item-start color="primary"  icon-start class="item-bold">
+          <ion-icon name="analytics"></ion-icon>
+          Signal {{RAW}}
+        </span>
+      </ion-col>
+      <ion-col align-self-center text-center>
+        <span ion-text item-start color="secondary"  icon-start class="item-bold">
+          <ion-icon name="heart"></ion-icon>
+          BPM {{BPM}}
+        </span>
+      </ion-col>
+      <ion-col align-self-center text-center>
+        <span ion-text item-start color="secondary"  icon-start class="item-bold">
+          <ion-icon name="stats"></ion-icon>
+          IBI {{IBI}}
+        </span>
+      </ion-col>
+      <ion-col align-self-center text-center>
+        <span ion-text item-start color="secondary"  icon-start class="item-bold">
+          <ion-icon name="stats"></ion-icon>
+          AMP {{AMP}}
+        </span>
+      </ion-col>
+    </ion-row>
+    <ion-card-content class="canvascard">
+      <canvas #canvasobject></canvas>
+    </ion-card-content>
+  </ion-card>
+
+
+</ion-content>

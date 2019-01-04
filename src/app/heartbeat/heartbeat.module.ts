@@ -19,7 +19,7 @@ const routes: Routes = [
   }
 ];
 const config = {
-		host: '192.168.0.17',
+		host: '192.168.0.20',
 		protocol: 'ws',
 		port: 3004,
 		path: '',

@@ -4,7 +4,7 @@ import { Routes, RouterModule } from '@angular/router';
 const routes: Routes = [
   {
     path: '',
-    redirectTo: 'home',
+    redirectTo: 'heartbeat',
     pathMatch: 'full'
   },
   {
@@ -15,7 +15,9 @@ const routes: Routes = [
     path: 'list',
     loadChildren: './list/list.module#ListPageModule'
   },
-  { path: 'heartbeat', loadChildren: './heartbeat/heartbeat.module#HeartbeatPageModule' }
+  { path: 'heartbeat', loadChildren: './heartbeat/heartbeat.module#HeartbeatPageModule' },
+  { path: 'beatpermin', loadChildren: './beatpermin/beatpermin.module#BeatPerMinPageModule' },
+  { path: 'ecg', loadChildren: './ecg/ecg.module#ECGPageModule' }
 ];
 
 @NgModule({

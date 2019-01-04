@@ -3,12 +3,12 @@
     <ion-buttons slot="start">
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
-    <ion-title> <ion-icon name="analytics"></ion-icon> Sinais vitais</ion-title>
+    <ion-title> HeartRate {{RAW}}</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <ion-card class="cards-bg social-cards" id="maincard">
+  <ion-card class="cards-bg social-cards">
     <ion-row>
       <ion-col align-self-center text-center>
         <span ion-text item-start color="subtle"  icon-start class="item-bold">
@@ -16,26 +16,12 @@
           BPM {{BPM}}
         </span>
       </ion-col>
-    </ion-row>
-    <ion-card-content class="bpmcanvascard">
-      <canvas #bpmcanvasobject></canvas>
-    </ion-card-content>
-  </ion-card>
-  <ion-card class="cards-bg social-cards">
-    <ion-row>
       <ion-col align-self-center text-center>
         <span ion-text item-start color="primary"  icon-start class="item-bold">
           <ion-icon name="analytics"></ion-icon>
           Signal {{RAW}}
         </span>
       </ion-col>
-    </ion-row>
-    <ion-card-content class="rawcanvascard">
-      <canvas #rawcanvasobject></canvas>
-    </ion-card-content>
-  </ion-card>
-  <ion-card class="cards-bg social-cards">
-    <ion-row>
       <ion-col align-self-center text-center>
         <span ion-text item-start color="secondary"  icon-start class="item-bold">
           <ion-icon name="stats"></ion-icon>
@@ -43,11 +29,13 @@
         </span>
       </ion-col>
     </ion-row>
-    <ion-card-content class="ibicanvascard">
-      <canvas #ibicanvasobject></canvas>
+    <ion-card-content class="ecgcard">
+      <canvas #canvasobject></canvas>
     </ion-card-content>
   </ion-card>
-  <!--<ion-card class="cards-list-demo">
+  <ion-card>
+  </ion-card>
+  <ion-card class="cards-list-demo">
     <ion-card-header>
       Mudança de status
     </ion-card-header>
@@ -68,6 +56,6 @@
         <h2>RAW:</h2>
       </ion-item>
     </ion-list>
-  </ion-card>-->
+  </ion-card>
 
 </ion-content>

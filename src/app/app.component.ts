@@ -24,6 +24,16 @@ export class AppComponent {
       title: 'Heartbeat',
       url: '/heartbeat',
       icon: 'heart'
+    },
+    {
+      title: 'BeatsPerMin',
+      url: '/beatpermin',
+      icon: 'heart'
+    },
+    {
+      title: 'ECG',
+      url: '/ecg',
+      icon: 'heart'
     }
   ];
 

@@ -2,13 +2,15 @@ import { Component, OnDestroy } from '@angular/core';
 import {MqttService} from '../services/mqtt.service';
 import {SubscriptionGrant} from '../models/subscription-grant';
 import {ConnectionStatus} from '../models/connection-status';
+import {MqttMessage} from '../models/mqtt-message';
+import {NotificationMessage} from '../models/notification-message';
 import {IClientOptions, MqttClient} from 'mqtt';
 
-export interface MqttMessage {
+/*export interface MqttMessage {
 	from: string;
 	data: string;
 	type?: string;
-}
+}*/
 
 @Component({
   selector: 'app-list',
@@ -75,8 +77,8 @@ export class ListPage implements OnDestroy {
   					this.status.push('Subscribed to esp/000001/RAW topic!');
   				} else {
   					this.rawMessages.push(msg);
-  					this.RAW = Number(msg.data);
-            this.items[0].value = this.RAW;
+						this.RAW = Number(msg.notification.data);
+  					this.items[0].value = this.RAW;
   				}
   			},
   			error: (error: Error) => {
@@ -90,7 +92,7 @@ export class ListPage implements OnDestroy {
   					this.status.push('Subscribed to esp/000001/BPM topic!');
   				} else {
             this.bpmMessages.push(msg);
-  					this.BPM = Number(msg.data);
+  					this.BPM = Number(msg.notification.data);
             this.items[1].value = this.BPM;
   				}
   			},
@@ -105,7 +107,7 @@ export class ListPage implements OnDestroy {
   					this.status.push('Subscribed to esp/000001/IBI topic!');
   				} else {
             this.ibiMessages.push(msg);
-  					this.IBI = Number(msg.data);
+  					this.IBI = Number(msg.notification.data);
             this.items[2].value = this.IBI;
   				}
   			},

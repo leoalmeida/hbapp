@@ -23,7 +23,7 @@ export class MqttService {
 
     constructor(@Inject(MQTT_CONFIG) config: MqttConfig,
                 @Optional() @Inject(MQTT_MOCK) private _mqttMock) {
-		
+
         if (!config.manageConnectionManually) {
             this.connect(config);
         }
@@ -35,7 +35,10 @@ export class MqttService {
         }
 
         this._client = this._mqttMock ? this._mqttMock.connect(null, config) : mqtt.connect(null, config);
-        this._client.on('message', (topic: string, message: Buffer) => {console.log(`message from ${topic}: ${message}`);this.updateTopic(topic, message.toString())});
+        this._client.on('message', (topic: string, message: Buffer) => {
+          //console.log(`message from ${topic}: ${message}`);
+          this.updateTopic(topic, message.toString())}
+        );
         this._client.on('offline', () => this._status.next(ConnectionStatus.DISCONNECTED));
         this._client.on('connect', (packet: IConnackPacket) => this._status.next(ConnectionStatus.CONNECTED));
     }

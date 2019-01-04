@@ -1,14 +1,23 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonicModule } from '@ionic/angular';
-import { RouterModule } from '@angular/router';
+import { Routes, RouterModule } from '@angular/router';
 
-import { ListPage } from './list.page';
+import { IonicModule } from '@ionic/angular';
+
+import { ECGPage } from './ecg.page';
 
 import { MqttService } from '../services/mqtt.service';
 import {MQTT_CONFIG} from '../tokens/mqtt-config.injection-token';
 
+//import {NgxMqttClientModule} from 'ngx-mqtt-client';
+
+const routes: Routes = [
+  {
+    path: '',
+    component: ECGPage
+  }
+];
 const config = {
 		host: '192.168.0.20',
 		protocol: 'ws',
@@ -19,20 +28,28 @@ const config = {
 		password: 'oWzHcp2N5M4f'
 	};
 
-
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    RouterModule.forChild([
-      {
-        path: '',
-        component: ListPage
-      }
-    ])
+
+    RouterModule.forChild(routes)
   ],
   providers: [MqttService, {provide: MQTT_CONFIG, useValue: config}],
-  declarations: [ListPage]
+  declarations: [ECGPage]
 })
-export class ListPageModule {}
+export class ECGPageModule {}
+
+
+/*
+	NgxMqttClientModule.withOptions({
+		host: 'm15.cloudmqtt.com',
+		protocol: 'mqtt',
+		port: 12863,
+		path: '/esp',
+        keepalive: 5,
+		username: 'xrufgoyx',
+		password: 'oWzHcp2N5M4f'
+	}),
+*/
